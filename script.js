@@ -779,22 +779,38 @@ function useTool(tool) {
 
         // Start at door 3
         g.style.display = 'block';
-        gsap.set(g, { left: centerX, top: centerY, x: 0, y: 0, rotation: 0 });
+        gsap.set(g, { left: centerX, top: centerY, x: 0, y: 0, rotation: 0, scale: 1 });
 
-        // Throw towards door 2 and spin
-        gsap.to(g, {
-            left: targetX, top: targetY, rotation: 720,
-            duration: 1.2, ease: "power2.in",
+        // Arc calculation: midpoint between door 3 and door 2, but higher Y
+        const midX = (centerX + targetX) / 2;
+        const midY = Math.min(centerY, targetY) - 200; // Peak of the arc
+
+        // Proper Arc Transition using GSAP
+        const tl = gsap.timeline({
             onComplete: () => {
                 g.style.display = 'none';
                 gsap.set(g, { x: 0, y: 0, rotation: 0 });
 
-                // Explode at door 2
+                // Explode at door 2 spot
                 createExplosionAt(targetX, targetY);
 
-                // Silently unlock door 3
+                // Silently unlock door 3 - User must click door 3 again to enter
                 isDoor3Unlocked = true;
             }
+        });
+
+        tl.to(g, {
+            left: midX,
+            top: midY,
+            rotation: 360,
+            duration: 0.6,
+            ease: "power2.out"
+        }).to(g, {
+            left: targetX,
+            top: targetY,
+            rotation: 720,
+            duration: 0.6,
+            ease: "power2.in"
         });
     }
 }
