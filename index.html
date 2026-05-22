@@ -77,6 +77,42 @@
         </div>
 
         <button class="funny-feedback-btn" onclick="complainLayout()">layout pasand nahi aya</button>
+
+        <!-- Tool Selection UI for Door 3 -->
+        <div id="door3Tools" class="tool-selector-overlay">
+            <div class="tool-card-container">
+                <h2 class="tool-title">The Door is Locked! Pick a tool to open it</h2>
+                <div class="tools-grid">
+                    <div class="tool-item" onclick="useTool('hammer')">
+                        <div class="tool-icon" style="font-size:4rem;">🔨</div>
+                        <span>Hammer</span>
+                    </div>
+                    <div class="tool-item" onclick="useTool('key')">
+                        <div class="tool-icon">🔑</div>
+                        <span>Key</span>
+                    </div>
+                    <div class="tool-item" onclick="useTool('grenade')">
+                        <div class="tool-icon css-grenade-icon">
+                            <div class="g-body"></div>
+                            <div class="g-pin"></div>
+                            <div class="g-lever"></div>
+                        </div>
+                        <span>Grenade</span>
+                    </div>
+                </div>
+                <button class="close-tools-btn" onclick="hideToolSelector()">Maybe later</button>
+            </div>
+        </div>
+
+        <!-- Animation Elements -->
+        <div id="hammerAnim" class="tool-anim-element" style="font-size:9rem;">🔨</div>
+        <div id="keyAnim" class="tool-anim-element">🔑</div>
+        <div id="grenadeAnim" class="tool-anim-element css-grenade-anim">
+            <div class="g-body"></div>
+            <div class="g-pin"></div>
+            <div class="g-lever"></div>
+        </div>
+        <div id="explosionEffect" class="explosion-overlay"></div>
     </div>
 
     <!-- STAGE 3: THE ROOMS -->
@@ -183,6 +219,24 @@
             </div>
         </div>
 
+        <!-- Room 3 (The Gift Box) -->
+        <div id="room3" class="room-content gift-room">
+            <div class="gift-container" onclick="openGift()">
+                <div class="gift-box">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body"></div>
+                    <div class="gift-ribbon-v"></div>
+                    <div class="gift-ribbon-h"></div>
+                </div>
+                <p class="gift-hint">Click the Gift</p>
+                <div id="giftMessage" class="gift-reveal-msg">
+                    bhai abi pase nahi ha gift next month de ge love you meri jaan
+                </div>
+                <button class="book-btn exit-gift-btn" onclick="backToDoors()" style="margin-top: 50px;">Go
+                    Back</button>
+            </div>
+        </div>
+
         <!-- Room 2 (Netflix UI Overhaul) -->
         <div id="room2" class="room-content netflix-room">
             <!-- Sidebar Nav (Scoped) -->
@@ -207,7 +261,11 @@
                     <li>My List</li>
                 </ul>
                 <div class="nf-header-right">
-                    <i class="fas fa-search"></i>
+                    <div class="nf-search-wrapper">
+                        <i class="fas fa-search search-icon" onclick="toggleSearchInput()"></i>
+                        <input type="text" id="nfSearchInput" class="nf-search-input"
+                            placeholder="Titles, keywords, people" oninput="handleSearch(this.value)">
+                    </div>
                     <i class="fas fa-bell"></i>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
                         class="nf-profile-img">
@@ -521,34 +579,39 @@
                         </div>
                     </div>
                     <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                    <!-- Search Results (Hidden by default) -->
+                    <div id="nfSearchContainer" class="search-results-container">
+                        <span class="close-search-results" onclick="closeSearch()">×</span>
+                        <h2 class="nf-row-head" id="searchResultTitle">Search Results</h2>
+                        <div id="nfSearchResultsGrid" class="search-results-grid"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Centralized Modal UI -->
-    <div id="nfVideoModal" class="nf-modal-overlay">
-        <div class="nf-modal-ui">
-            <button class="nf-modal-close-btn" onclick="closeVideoModal()">×</button>
-            <div id="modalHeroArea" class="nf-modal-header"></div>
-            <div class="nf-modal-content-area">
-                <h2 id="modalTitle" class="nf-modal-ttl">Video Title</h2>
-                <div class="modal-meta"
-                    style="display:flex; gap:15px; margin-bottom:20px; color:#46d369; font-weight:700;">
-                    <span id="modalMatch">98% Match</span>
-                    <span style="color:#d2d2d2">2024</span>
-                    <span style="border:1px solid #777; padding:0 4px; color:#d2d2d2">HD</span>
-                </div>
-                <p id="modalDescription" class="nf-modal-details">Detailed description of the memory goes
-                    here...</p>
-                <div style="margin-top:30px; display:flex; gap:15px;">
-                    <button id="modalPlayBtn" class="hero-btn hero-btn-play" style="width:200px;">
-                        <i class="fas fa-play"></i> Play Now
-                    </button>
+        <!-- Centralized Modal UI -->
+        <div id="nfVideoModal" class="nf-modal-overlay">
+            <div class="nf-modal-ui">
+                <button class="nf-modal-close-btn" onclick="closeVideoModal()">×</button>
+                <div id="modalHeroArea" class="nf-modal-header"></div>
+                <div class="nf-modal-content-area">
+                    <h2 id="modalTitle" class="nf-modal-ttl">Video Title</h2>
+                    <div class="modal-meta"
+                        style="display:flex; gap:15px; margin-bottom:20px; color:#46d369; font-weight:700;">
+                        <span id="modalMatch">98% Match</span>
+                        <span style="color:#d2d2d2">2024</span>
+                        <span style="border:1px solid #777; padding:0 4px; color:#d2d2d2">HD</span>
+                    </div>
+                    <p id="modalDescription" class="nf-modal-details">Detailed description of the memory goes
+                        here...</p>
+                    <div style="margin-top:30px; display:flex; gap:15px;">
+                        <button id="modalPlayBtn" class="hero-btn hero-btn-play" style="width:200px;">
+                            <i class="fas fa-play"></i> Play Now
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     </div>

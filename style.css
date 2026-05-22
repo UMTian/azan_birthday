@@ -1818,3 +1818,416 @@ kbd {
     font-family: inherit;
     color: white;
 }
+
+/* --- NETFLIX SEARCH STYLES --- */
+.nf-search-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 20px;
+}
+
+.search-icon {
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.nf-search-input {
+    width: 0;
+    padding: 0;
+    background: #000;
+    border: 1px solid #fff;
+    color: #fff;
+    transition: all 0.3s ease;
+    outline: none;
+    opacity: 0;
+    margin-left: 10px;
+}
+
+.nf-search-input.active {
+    width: 250px;
+    padding: 7px 10px 7px 35px;
+    opacity: 1;
+    margin-left: -25px;
+}
+
+.search-results-container {
+    display: none;
+    padding: 100px 4% 50px;
+    background: #141414;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 40;
+    overflow-y: auto;
+}
+
+.search-results-container.active {
+    display: block;
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.search-no-results {
+    color: #999;
+    font-size: 1.2rem;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.close-search-results {
+    position: absolute;
+    top: 100px;
+    right: 4%;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 41;
+}
+
+/* --- DOOR 3 TOOL UI --- */
+.tool-selector-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+
+.tool-selector-overlay.active {
+    display: flex;
+}
+
+.tool-card-container {
+    background: linear-gradient(135deg, #1e1e1e 0%, #111 100%);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    text-align: center;
+    max-width: 600px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+}
+
+.tool-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 30px;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.tool-item {
+    background: #252525;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.tool-item:hover {
+    background: #333;
+    transform: translateY(-10px);
+    border-color: var(--gold);
+}
+
+.tool-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.tool-item span {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    color: #eee;
+}
+
+.close-tools-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #999;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Tool Animations */
+.tool-anim-element {
+    position: fixed;
+    font-size: 5rem;
+    z-index: 9999;
+    display: none;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/* CSS Grenade Shape */
+.css-grenade-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.css-grenade-anim {
+    position: relative;
+    cursor: pointer;
+}
+
+.css-grenade-icon {
+    width: 50px;
+    height: 70px;
+}
+
+.css-grenade-anim {
+    width: 80px;
+    height: 110px;
+}
+
+.css-grenade-icon .g-body,
+.css-grenade-anim .g-body {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 35% 35%, #6dbf4d, #2d6b18);
+    border-radius: 45% 45% 40% 40%;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5), inset -3px -3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.css-grenade-icon .g-body {
+    width: 34px;
+    height: 40px;
+}
+
+.css-grenade-anim .g-body {
+    width: 54px;
+    height: 64px;
+}
+
+.css-grenade-icon .g-pin,
+.css-grenade-anim .g-pin {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #aaa;
+    border-radius: 3px 3px 0 0;
+}
+
+.css-grenade-icon .g-pin {
+    width: 10px;
+    height: 14px;
+}
+
+.css-grenade-anim .g-pin {
+    width: 16px;
+    height: 22px;
+}
+
+.css-grenade-icon .g-lever,
+.css-grenade-anim .g-lever {
+    position: absolute;
+    top: 2px;
+    left: 60%;
+    background: #ccc;
+    border-radius: 2px;
+    transform: rotate(30deg);
+}
+
+.css-grenade-icon .g-lever {
+    width: 5px;
+    height: 18px;
+}
+
+.css-grenade-anim .g-lever {
+    width: 8px;
+    height: 28px;
+}
+
+/* Unlocked title style */
+.tool-title-unlocked {
+    color: #46d369 !important;
+    font-size: 2rem !important;
+}
+
+.explosion-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, #ffaa00 0%, #ff4400 40%, transparent 70%), white;
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.door-shaking {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes hammering {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    20% {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    40% {
+        transform: translate(-50%, -50%) rotate(10deg);
+    }
+}
+
+@keyframes rotate-key {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+/* GIFT BOX ROOM */
+.gift-room {
+    background: radial-gradient(circle, #2c1a12 0%, #000 100%) !important;
+}
+
+.gift-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.gift-box {
+    width: 200px;
+    height: 180px;
+    background: #e50914;
+    /* Netflix Red */
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: 0.5s;
+}
+
+.gift-lid {
+    width: 220px;
+    height: 40px;
+    background: #ff0b17;
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    z-index: 2;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: 0.5s;
+}
+
+.gift-ribbon-v {
+    position: absolute;
+    width: 40px;
+    height: 100%;
+    background: #ffd700;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.gift-ribbon-h {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    background: #ffd700;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.gift-box:hover {
+    transform: scale(1.05);
+}
+
+.gift-container.opened .gift-lid {
+    transform: translateY(-100px) rotate(-15deg);
+    opacity: 0;
+}
+
+.gift-container.opened .gift-box {
+    transform: translateY(20px);
+}
+
+.gift-reveal-msg {
+    margin-top: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    max-width: 80%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.8s;
+}
+
+.gift-container.opened .gift-reveal-msg {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gift-hint {
+    margin-top: 20px;
+    font-style: italic;
+    color: #888;
+}
+
+.exit-gift-btn {
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
+}
+
+.gift-container.opened .exit-gift-btn {
+    opacity: 1;
+    pointer-events: auto;
+}

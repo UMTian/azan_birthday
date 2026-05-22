@@ -1,5 +1,6 @@
 // --- GLOBAL STATE ---
 let isSkipped = false;
+let isDoor3Unlocked = false;
 
 // --- LIGHTBOX ZOOM LOGIC ---
 function openLightbox(src) {
@@ -319,6 +320,20 @@ function enterRoom(roomNumber) {
     const hotspots = document.querySelectorAll('.door-hotspot');
     const selectedHotspot = hotspots[roomNumber - 1];
 
+    // --- DOOR 3 SPECIAL LOGIC ---
+    if (roomNumber === 3 && !isDoor3Unlocked) {
+        // Shake the door and show tool UI
+        doorOverlay.classList.add('door-shaking');
+        setTimeout(() => doorOverlay.classList.remove('door-shaking'), 500);
+        showToolSelector();
+        return;
+    }
+
+    // If unlocked, close the tool UI before entering
+    if (roomNumber === 3 && isDoor3Unlocked) {
+        hideToolSelector();
+    }
+
     if (document.body.classList.contains('xp-mode')) {
         // XP MODE: Instant Reveal & Hide Background UI
         document.getElementById('xpIcons').style.display = 'none';
@@ -532,36 +547,36 @@ function toggleStartMenu() {
 let currentVideoIndex = 0;
 
 const nfVideos = [
-    { title: "HB Azan: The Legend", path: "New folder (2)/HB.mp4", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=800", match: "99% Match", desc: "The cinematic beginning of Azan's legendary birthday celebration. A must watch for all senior developers." },
-    { title: "HB Reunion", path: "New folder (2)/HB1.mp4", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800", match: "97% Match", desc: "The whole gang gets together for a night of pure chaos and unforgettable laughs. The reunion we all needed." },
-    { title: "Birthday Vibes 2", path: "New folder (2)/HB2.mp4", img: "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?q=80&w=800", match: "95% Match", desc: "Keeping the energy high with round two of the birthday celebrations. Azan's vibe is unmatched here." },
-    { title: "The Grill Night", path: "New folder (2)/BBQ.mp4", img: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800", match: "98% Match", desc: "Smoke, fire, and meat. A masterclass in BBQ hosted by the birthday boy himself." },
-    { title: "Farzam's Big Day", path: "New folder (2)/farzambd.mp4", img: "https://images.unsplash.com/photo-1513623935135-c896b59073c1?q=80&w=800", match: "94% Match", desc: "The crew celebrating another icon's big milestone. Good times, better friends." },
-    { title: "Shan's Celebration", path: "New folder (2)/shanBD.mp4", img: "https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=800", match: "96% Match", desc: "High octane birthday Bash for Shan. The dancing was questionable, the fun was absolute." },
-    { title: "SF Birthday Party", path: "New folder (2)/sfBD.mp4", img: "subhanhb.jpg", match: "92% Match", desc: "A late night underground birthday bash with the finest crew in the tech industry." },
-    { title: "Wrestling Vol 1", path: "New folder (2)/wrestling1.mp4", img: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=800", match: "98% Match", desc: "Azan shows off his 'professional' wrestling skills. Safety was not a priority." },
-    { title: "Wrestling Vol 2", path: "New folder (2)/wrestling2.mp4", img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=800", match: "96% Match", desc: "The rematch nobody asked for but everyone watched. Pure adrenaline and bad decisions." },
-    { title: "The Belt Story", path: "New folder (2)/belt.mp4", img: "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800", match: "95% Match", desc: "What happens when you give these guys a belt? Find out in this high-stakes comedy thriller." },
-    { title: "Card Games", path: "New folder (2)/cards.mp4", img: "https://images.unsplash.com/photo-1541278107931-e006523892df?q=80&w=800", match: "94% Match", desc: "Poker faces, bluffing, and absolute betrayal over a deck of cards." },
-    { title: "Pool Vol 1", path: "New folder (2)/pool.mp4", img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=800", match: "98% Match", desc: "Summer vibes and pool diving. Azan's form is 10/10 (in his own mind)." },
-    { title: "Pool Vol 2", path: "New folder (2)/pool2.mp4", img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800", match: "97% Match", desc: "More water chaos. The pool couldn't handle the heat these developers brought." },
-    { title: "Ice Cream Hunt", path: "New folder (2)/icecream.mp4", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800", match: "93% Match", desc: "A late-night quest for the perfect scoop. Spoiler: they found it." },
-    { title: "Naughty Moments", path: "New folder (2)/naughtyazan.mp4", img: "https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=800", match: "99% Match", desc: "The clips Azan probably doesn't want you to see. Viewer discretion advised." },
-    { title: "The Bold One", path: "New folder (2)/sex.mp4", img: "https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=800", match: "95% Match", desc: "A cinematic look at the boldest personality in the group. Unfiltered and raw." },
-    { title: "Blowjob Mystery", path: "New folder (2)/blowjob.mp4", img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=800", match: "91% Match", desc: "A mystery that remains unsolved. Many theories, zero evidence." },
-    { title: "Random Chaos", path: "New folder (2)/random.mp4", img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800", match: "94% Match", desc: "No plot, no plan, just pure random moments of friendship." },
-    { title: "Character Day", path: "New folder (2)/characterday.mp4", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800", match: "96% Match", desc: "The day everyone decided to become someone else. Costumes 10/10." },
-    { title: "Journey Pt 1", path: "New folder (2)/travel.mp4", img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800", match: "97% Match", desc: "Beginning of the great road trip. Scenic views and terrible singing." },
-    { title: "Journey Pt 2", path: "New folder (2)/travelling.mp4", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800", match: "95% Match", desc: "The adventure continues. More miles, more memories, fewer snacks." },
-    { title: "Cheezious 1", path: "New folder (2)/cheezious1.mp4", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800", match: "99% Match", desc: "The ultimate cheat meal. Azan's true love found in a pizza box." },
-    { title: "Cheezious 2", path: "New folder (2)/cheezious2.mp4", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800", match: "98% Match", desc: "He went back for more. We don't judge genius when we see it." },
-    { title: "Dining Out", path: "New folder (2)/resturant.mp4", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800", match: "96% Match", desc: "Fancy food for a fancy crew. A night of fine dining and even finer jokes." },
-    { title: "The Sitting Plan", path: "New folder (2)/sittingplan.mp4", img: "https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=800", match: "94% Match", desc: "A complex organizational challenge: how to fit 10 developers around 1 table." },
-    { title: "Qawali Night", path: "New folder (2)/qawali night.mp4", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800", match: "99% Match", desc: "Soulful music and great company. The cultural highlight of the year." },
-    { title: "Midnight Special", path: "New folder (2)/midnight.mp4", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800", match: "98% Match", desc: "The countdown to the big day. Midnight surprises for a deserving friend." },
-    { title: "Valentimes", path: "New folder (2)/valentimes.mp4", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800", match: "97% Match", desc: "Celebrating love and friendship on the most romantic day of the year." },
-    { title: "The Montage", path: "New folder (2)/edit.mp4", img: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800", match: "99% Match", desc: "A cinematic edit of all the best moments. Your life in 60 seconds." },
-    { title: "Ramzan Traditions", path: "ramzan.mp4", img: "ramzan.jpg", match: "98% Match", desc: "Capturing the spiritual essence and peaceful nights of the holy month. A beautiful reflection of traditions." }
+    { title: "HB Azan: The Legend", path: "New folder (2)/HB.mp4", img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=800", match: "99% Match", desc: "The cinematic beginning of Azan's legendary birthday celebration. A must watch for all senior developers.", keywords: ["happy birthday", "azan", "legend"] },
+    { title: "HB Reunion", path: "New folder (2)/HB1.mp4", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800", match: "97% Match", desc: "The whole gang gets together for a night of pure chaos and unforgettable laughs. The reunion we all needed.", keywords: ["happy birthday", "reunion", "hostel"] },
+    { title: "Birthday Vibes 2", path: "New folder (2)/HB2.mp4", img: "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?q=80&w=800", match: "95% Match", desc: "Keeping the energy high with round two of the birthday celebrations. Azan's vibe is unmatched here.", keywords: ["happy birthday", "vibes", "party"] },
+    { title: "The Grill Night", path: "New folder (2)/BBQ.mp4", img: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800", match: "98% Match", desc: "Smoke, fire, and meat. A masterclass in BBQ hosted by the birthday boy himself.", keywords: ["bbq", "grill", "food", "party"] },
+    { title: "Farzam's Big Day", path: "New folder (2)/farzambd.mp4", img: "https://images.unsplash.com/photo-1513623935135-c896b59073c1?q=80&w=800", match: "94% Match", desc: "The crew celebrating another icon's big milestone. Good times, better friends.", keywords: ["happy birthday", "farzam", "celebration"] },
+    { title: "Shan's Celebration", path: "New folder (2)/shanBD.mp4", img: "https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=800", match: "96% Match", desc: "High octane birthday Bash for Shan. The dancing was questionable, the fun was absolute.", keywords: ["happy birthday", "shan", "fun"] },
+    { title: "SF Birthday Party", path: "New folder (2)/sfBD.mp4", img: "subhanhb.jpg", match: "92% Match", desc: "A late night underground birthday bash with the finest crew in the tech industry.", keywords: ["happy birthday", "sf", "party", "hostel"] },
+    { title: "Wrestling Vol 1", path: "New folder (2)/wrestling1.mp4", img: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=800", match: "98% Match", desc: "Azan shows off his 'professional' wrestling skills. Safety was not a priority.", keywords: ["wrestling", "fun", "action"] },
+    { title: "Wrestling Vol 2", path: "New folder (2)/wrestling2.mp4", img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=800", match: "96% Match", desc: "The rematch nobody asked for but everyone watched. Pure adrenaline and bad decisions.", keywords: ["wrestling", "fun", "rematch"] },
+    { title: "The Belt Story", path: "New folder (2)/belt.mp4", img: "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800", match: "95% Match", desc: "What happens when you give these guys a belt? Find out in this high-stakes comedy thriller.", keywords: ["belt", "funny", "hostel", "fun"] },
+    { title: "Card Games", path: "New folder (2)/cards.mp4", img: "https://images.unsplash.com/photo-1541278107931-e006523892df?q=80&w=800", match: "94% Match", desc: "Poker faces, bluffing, and absolute betrayal over a deck of cards.", keywords: ["cards", "fun", "night", "hostel"] },
+    { title: "Pool Vol 1", path: "New folder (2)/pool.mp4", img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=800", match: "98% Match", desc: "Summer vibes and pool diving. Azan's form is 10/10 (in his own mind).", keywords: ["swimming", "pool party", "water", "fun"] },
+    { title: "Pool Vol 2", path: "New folder (2)/pool2.mp4", img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800", match: "97% Match", desc: "More water chaos. The pool couldn't handle the heat these developers brought.", keywords: ["swimming", "pool party", "water", "fun"] },
+    { title: "Ice Cream Hunt", path: "New folder (2)/icecream.mp4", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800", match: "93% Match", desc: "A late-night quest for the perfect scoop. Spoiler: they found it.", keywords: ["ice cream", "night", "food", "fun"] },
+    { title: "Naughty Moments", path: "New folder (2)/naughtyazan.mp4", img: "https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=800", match: "99% Match", desc: "The clips Azan probably doesn't want you to see. Viewer discretion advised.", keywords: ["naughty", "funny", "azan"] },
+    { title: "The Bold One", path: "New folder (2)/sex.mp4", img: "https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=800", match: "95% Match", desc: "A cinematic look at the boldest personality in the group. Unfiltered and raw.", keywords: ["bold", "sex", "fun"] },
+    { title: "Blowjob Mystery", path: "New folder (2)/blowjob.mp4", img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=800", match: "91% Match", desc: "A mystery that remains unsolved. Many theories, zero evidence.", keywords: ["blowjob", "mystery", "funny"] },
+    { title: "Random Chaos", path: "New folder (2)/random.mp4", img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800", match: "94% Match", desc: "No plot, no plan, just pure random moments of friendship.", keywords: ["random", "chaos", "fun", "yakiya"] },
+    { title: "Character Day", path: "New folder (2)/characterday.mp4", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800", match: "96% Match", desc: "The day everyone decided to become someone else. Costumes 10/10.", keywords: ["character day", "fun", "costumes"] },
+    { title: "Journey Pt 1", path: "New folder (2)/travel.mp4", img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800", match: "97% Match", desc: "Beginning of the great road trip. Scenic views and terrible singing.", keywords: ["travelling", "journey", "trip"] },
+    { title: "Journey Pt 2", path: "New folder (2)/travelling.mp4", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800", match: "95% Match", desc: "The adventure continues. More miles, more memories, fewer snacks.", keywords: ["travelling", "journey", "trip"] },
+    { title: "Cheezious 1", path: "New folder (2)/cheezious1.mp4", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800", match: "99% Match", desc: "The ultimate cheat meal. Azan's true love found in a pizza box.", keywords: ["pizza", "cheezious", "food", "resturant"] },
+    { title: "Cheezious 2", path: "New folder (2)/cheezious2.mp4", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800", match: "98% Match", desc: "He went back for more. We don't judge genius when we see it.", keywords: ["pizza", "cheezious", "food", "resturant"] },
+    { title: "Dining Out", path: "New folder (2)/resturant.mp4", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800", match: "96% Match", desc: "Fancy food for a fancy crew. A night of fine dining and even finer jokes.", keywords: ["resturant", "dining", "food"] },
+    { title: "The Sitting Plan", path: "New folder (2)/sittingplan.mp4", img: "https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=800", match: "94% Match", desc: "A complex organizational challenge: how to fit 10 developers around 1 table.", keywords: ["exam", "sitting position", "hostel", "study"] },
+    { title: "Qawali Night", path: "New folder (2)/qawali night.mp4", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800", match: "99% Match", desc: "Soulful music and great company. The cultural highlight of the year.", keywords: ["qawali", "night", "music", "cultural"] },
+    { title: "Midnight Special", path: "New folder (2)/midnight.mp4", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800", match: "98% Match", desc: "The countdown to the big day. Midnight surprises for a deserving friend.", keywords: ["midnight", "night", "surprise", "hostel"] },
+    { title: "Valentimes", path: "New folder (2)/valentimes.mp4", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800", match: "97% Match", desc: "Celebrating love and friendship on the most romantic day of the year.", keywords: ["valentimes", "love", "fun"] },
+    { title: "The Montage", path: "New folder (2)/edit.mp4", img: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800", match: "99% Match", desc: "A cinematic edit of all the best moments. Your life in 60 seconds.", keywords: ["edit", "montage", "character day"] },
+    { title: "Ramzan Traditions", path: "ramzan.mp4", img: "ramzan.jpg", match: "98% Match", desc: "Capturing the spiritual essence and peaceful nights of the holy month. A beautiful reflection of traditions.", keywords: ["ramazan", "traditions", "water", "spiritual"] }
 ];
 
 function openVideoModal(index) {
@@ -638,4 +653,205 @@ function scrollNFRow(btn, direction) {
         left: scrollAmount * direction,
         behavior: 'smooth'
     });
+}
+// --- NETFLIX SEARCH LOGIC ---
+function toggleSearchInput() {
+    const input = document.getElementById('nfSearchInput');
+    input.classList.toggle('active');
+    if (input.classList.contains('active')) {
+        input.focus();
+    }
+}
+
+function handleSearch(query) {
+    const container = document.getElementById('nfSearchContainer');
+    const grid = document.getElementById('nfSearchResultsGrid');
+    const title = document.getElementById('searchResultTitle');
+
+    if (!query || query.trim() === "") {
+        container.classList.remove('active');
+        return;
+    }
+
+    container.classList.add('active');
+    grid.innerHTML = '';
+    const searchTerm = query.toLowerCase().trim();
+
+    const results = nfVideos.filter((video, index) => {
+        const titleMatch = video.title.toLowerCase().includes(searchTerm);
+        const keywordMatch = video.keywords && video.keywords.some(k => k.toLowerCase().includes(searchTerm));
+        if (titleMatch || keywordMatch) {
+            video.originalIndex = index; // Store original index for modal
+            return true;
+        }
+        return false;
+    });
+
+    if (results.length === 0) {
+        title.innerText = `No results found for "${query}"`;
+        grid.innerHTML = '<div class="search-no-results">Try searching for "party", "pool", "birthday", or "pizza"</div>';
+    } else {
+        title.innerText = `Results for "${query}"`;
+        results.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'nf-card-item';
+            card.onclick = () => openVideoModal(video.originalIndex);
+            card.innerHTML = `
+                <img src="${video.img}">
+                <div class="nf-card-overlay">
+                    <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                    <div class="nf-card-title">${video.title}</div>
+                    <div class="nf-card-meta"><span class="nf-match">${video.match}</span></div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+}
+
+function closeSearch() {
+    document.getElementById('nfSearchContainer').classList.remove('active');
+    document.getElementById('nfSearchInput').value = '';
+    document.getElementById('nfSearchInput').classList.remove('active');
+}
+function showToolSelector() {
+    // Reset to original state each time shown
+    const title = document.querySelector('#door3Tools .tool-title');
+    const grid = document.querySelector('#door3Tools .tools-grid');
+    if (!isDoor3Unlocked) {
+        if (title) { title.textContent = 'The Door is Locked! Pick a tool to open it'; title.className = 'tool-title'; }
+        if (grid) grid.style.display = '';
+    }
+    document.getElementById('door3Tools').classList.add('active');
+}
+
+function hideToolSelector() {
+    document.getElementById('door3Tools').classList.remove('active');
+}
+
+function useTool(tool) {
+    hideToolSelector();
+    const door3 = document.getElementById('doorOverlay3');
+
+    // Position of door 3 hotspot for animation targets
+    const hotspots = document.querySelectorAll('.door-hotspot');
+    const hotspot = hotspots[2]; // Index 2 is door 3
+    const rect = hotspot.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    if (tool === 'hammer') {
+        const h = document.getElementById('hammerAnim');
+        h.style.display = 'block';
+        h.style.left = centerX + 'px';
+        h.style.top = centerY + 'px';
+        h.style.animation = 'hammering 0.3s ease infinite';
+
+        setTimeout(() => {
+            h.style.display = 'none';
+            h.style.animation = 'none';
+            door3.classList.add('door-shaking');
+            setTimeout(() => door3.classList.remove('door-shaking'), 500);
+        }, 1500);
+
+    } else if (tool === 'key') {
+        const k = document.getElementById('keyAnim');
+        k.style.display = 'block';
+        k.style.left = centerX + 'px';
+        k.style.top = centerY + 'px';
+        k.style.animation = 'rotate-key 0.5s ease infinite';
+
+        setTimeout(() => {
+            k.style.display = 'none';
+            k.style.animation = 'none';
+            door3.classList.add('door-shaking');
+            setTimeout(() => door3.classList.remove('door-shaking'), 500);
+        }, 1500);
+
+    } else if (tool === 'grenade') {
+        const g = document.getElementById('grenadeAnim');
+        g.style.display = 'block';
+        g.style.left = centerX + 'px';
+        g.style.top = centerY + 'px';
+        gsap.set(g, { x: 0, y: 0, rotation: 0 });
+
+        // Calculate 2nd door position (wrong direction!)
+        const door2Hotspot = hotspots[1];
+        const door2Rect = door2Hotspot.getBoundingClientRect();
+        const door2X = door2Rect.left + door2Rect.width / 2;
+        const door2Y = door2Rect.top + door2Rect.height / 2;
+        const throwX = door2X - centerX;
+        const throwY = door2Y - centerY;
+
+        // Animate throwing towards 2nd door
+        gsap.to(g, {
+            x: throwX, y: throwY, rotation: 720, duration: 1, ease: "power2.out",
+            onComplete: () => {
+                // Explode at 2nd door position
+                createExplosionAt(door2X, door2Y);
+
+                g.style.display = 'none';
+                gsap.set(g, { x: 0, y: 0 });
+
+                // Silently unlock — no message, user clicks door again
+                isDoor3Unlocked = true;
+            }
+        });
+    }
+}
+
+function openGift() {
+    const container = document.querySelector('.gift-container');
+    container.classList.add('opened');
+}
+
+function createExplosionAt(x, y) {
+    // 1. Screen flash
+    const flash = document.getElementById('explosionEffect');
+    gsap.fromTo(flash, { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power2.out" });
+
+    // 2. Screen shake
+    const doorStage = document.getElementById('doorStage');
+    gsap.to(doorStage, {
+        x: 10, duration: 0.05, yoyo: true, repeat: 11,
+        onComplete: () => gsap.set(doorStage, { x: 0 })
+    });
+
+    // 3. Big fireball center
+    const fireball = document.createElement('div');
+    fireball.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:20px; height:20px; 
+        border-radius:50%; background:radial-gradient(circle, #fff 0%, #ffcc00 30%, #ff6600 60%, #ff2200 100%);
+        z-index:9999; pointer-events:none; transform:translate(-50%,-50%); box-shadow: 0 0 60px 30px rgba(255,100,0,0.8);`;
+    document.body.appendChild(fireball);
+    gsap.to(fireball, { width: 200, height: 200, opacity: 0, duration: 0.7, ease: "power2.out", onComplete: () => fireball.remove() });
+
+    // 4. Fire particles
+    const colors = ['#ff2200', '#ff4400', '#ff6600', '#ffaa00', '#ffcc00', '#fff'];
+    for (let i = 0; i < 50; i++) {
+        const p = document.createElement('div');
+        const size = 6 + Math.random() * 18;
+        p.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:${size}px; height:${size}px;
+            border-radius:50%; background:${colors[Math.floor(Math.random() * colors.length)]};
+            z-index:9999; pointer-events:none; transform:translate(-50%,-50%);
+            box-shadow: 0 0 ${size}px ${colors[Math.floor(Math.random() * colors.length)]};`;
+        document.body.appendChild(p);
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 100 + Math.random() * 400;
+        gsap.to(p, {
+            x: Math.cos(angle) * dist,
+            y: Math.sin(angle) * dist,
+            opacity: 0, scale: 0,
+            duration: 0.6 + Math.random() * 0.8,
+            ease: "power3.out",
+            onComplete: () => p.remove()
+        });
+    }
+
+    // 5. Smoke ring
+    const smoke = document.createElement('div');
+    smoke.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:10px; height:10px;
+        border-radius:50%; border:3px solid rgba(100,100,100,0.6); z-index:9998; pointer-events:none;
+        transform:translate(-50%,-50%);`;
+    document.body.appendChild(smoke);
+    gsap.to(smoke, { width: 350, height: 350, opacity: 0, borderWidth: 1, duration: 1, ease: "power2.out", onComplete: () => smoke.remove() });
 }
