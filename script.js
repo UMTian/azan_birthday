@@ -770,30 +770,29 @@ function useTool(tool) {
 
     } else if (tool === 'grenade') {
         const g = document.getElementById('grenadeAnim');
-        g.style.display = 'block';
-        g.style.left = centerX + 'px';
-        g.style.top = centerY + 'px';
-        gsap.set(g, { x: 0, y: 0, rotation: 0 });
 
-        // Calculate 2nd door position (wrong direction!)
-        const door2Hotspot = hotspots[1];
+        // Get door 2 center (wrong direction target)
+        const door2Hotspot = document.querySelectorAll('.door-hotspot')[1];
         const door2Rect = door2Hotspot.getBoundingClientRect();
-        const door2X = door2Rect.left + door2Rect.width / 2;
-        const door2Y = door2Rect.top + door2Rect.height / 2;
-        const throwX = door2X - centerX;
-        const throwY = door2Y - centerY;
+        const targetX = door2Rect.left + door2Rect.width / 2;
+        const targetY = door2Rect.top + door2Rect.height / 2;
 
-        // Animate throwing towards 2nd door
+        // Start at door 3
+        g.style.display = 'block';
+        gsap.set(g, { left: centerX, top: centerY, x: 0, y: 0, rotation: 0 });
+
+        // Throw towards door 2 and spin
         gsap.to(g, {
-            x: throwX, y: throwY, rotation: 720, duration: 1, ease: "power2.out",
+            left: targetX, top: targetY, rotation: 720,
+            duration: 1.2, ease: "power2.in",
             onComplete: () => {
-                // Explode at 2nd door position
-                createExplosionAt(door2X, door2Y);
-
                 g.style.display = 'none';
-                gsap.set(g, { x: 0, y: 0 });
+                gsap.set(g, { x: 0, y: 0, rotation: 0 });
 
-                // Silently unlock — no message, user clicks door again
+                // Explode at door 2
+                createExplosionAt(targetX, targetY);
+
+                // Silently unlock door 3
                 isDoor3Unlocked = true;
             }
         });
