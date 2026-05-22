@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Birthday Portal | Choose Your Journey</title>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="vignette"></div>
+
+    <!-- STAGE 1: THE BIRTHDAY IDE -->
+    <div id="wishStage" class="full-stage active-stage">
+        <div class="wish-content ide-container">
+            <div id="ideWindow" class="ide-window">
+                <div class="ide-titlebar">
+                    <div class="window-controls">
+                        <span class="control-dot red"></span>
+                        <span class="control-dot yellow"></span>
+                        <span class="control-dot green"></span>
+                    </div>
+                    <div class="file-info">
+                        <span id="langSymbol" class="lang-symbol">[++]</span>
+                        <span class="file-name">birthday_wishes.code</span>
+                    </div>
+                </div>
+                <div class="ide-body">
+                    <div class="line-numbers" id="lineNumbers">
+                        1<br>2<br>3<br>4<br>5
+                    </div>
+                    <div class="code-area">
+                        <pre id="codePlaceholder"><span class="cursor">|</span></pre>
+                    </div>
+                </div>
+                <div class="ide-footer">
+                    <button class="wish-btn" id="compileBtn" style="opacity: 0; pointer-events: none;"
+                        onclick="revealBirthdayMsg()">
+                        Compile & Run
+                    </button>
+                    <button class="skip-btn" onclick="skipIDE()">Skip Simulation</button>
+                    <span class="status-msg">UTF-8 | CRLF | Azan-OS</span>
+                </div>
+            </div>
+
+            <!-- Post-Compile Message -->
+            <div id="birthdayMsg" class="birthday-msg-stage" style="display: none; opacity: 0;">
+                <h1 class="fancy-text">Happy Birthday</h1>
+                <p class="nickname-text" style="opacity: 0;"></p>
+                <div id="heartfeltMsg" class="heartfelt-text" style="display: none; opacity: 0;"></div>
+                <button class="proceed-btn" onclick="goToDoors()">lets make it remeberable</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 2: THE 3 DOORS -->
+    <div id="doorStage" class="full-stage">
+        <!-- Door Opening Overlays -->
+        <div id="doorOverlay1" class="door-opening-overlay" style="background-image: url('1st_door.png');"></div>
+        <div id="doorOverlay2" class="door-opening-overlay" style="background-image: url('2nd_door.png');"></div>
+        <div id="doorOverlay3" class="door-opening-overlay" style="background-image: url('3rd_door.png');"></div>
+
+        <div class="hotspot-container">
+            <div class="door-hotspot" onclick="enterRoom(1)" style="left: 0%; width: 33%;"></div>
+            <div class="door-hotspot" onclick="enterRoom(2)" style="left: 33%; width: 34%;"></div>
+            <div class="door-hotspot" onclick="enterRoom(3)" style="left: 67%; width: 33%;"></div>
+        </div>
+
+        <button class="funny-feedback-btn" onclick="complainLayout()">layout pasand nahi aya</button>
+    </div>
+
+    <!-- STAGE 3: THE ROOMS -->
+    <div id="roomStage" class="full-stage">
+        <!-- Room 1 (Scrapbook) -->
+        <div id="room1" class="room-content">
+            <div class="scrapbook-container" id="memoryBook">
+                <!-- Cover -->
+                <div class="book-page" style="z-index: 15;">
+                    <div class="page-front book-cover" onclick="flipPage(this)">
+                        <h1 style="font-size: 3.5rem; margin-bottom: 20px;">Azan's</h1>
+                        <h2 style="font-size: 2rem;">Memory Book</h2>
+                        <p style="margin-top: 50px; font-style: italic;">Tap to Open</p>
+                    </div>
+                    <div class="page-back" onclick="flipPage(this)">
+                        <!-- BACK of Cover: pic1x -->
+                        <img src="New folder/pic11.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <img src="New folder/pic12.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <div class="page-num">1</div>
+                    </div>
+                </div>
+
+                <!-- Page 1 (pic2x & pic3x) -->
+                <div class="book-page" style="z-index: 14;">
+                    <div class="page-front" onclick="flipPage(this)">
+                        <img src="New folder/pic21.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <img src="New folder/pic22.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <div class="page-num">2</div>
+                    </div>
+                    <div class="page-back" onclick="flipPage(this)">
+                        <img src="New folder/pic31.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic32.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic33.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic34.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <div class="page-num">3</div>
+                    </div>
+                </div>
+
+                <!-- Page 2 (pic4x & pic5x) -->
+                <div class="book-page" style="z-index: 13;">
+                    <div class="page-front" onclick="flipPage(this)">
+                        <img src="New folder/pic41.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic42.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic43.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <img src="New folder/pic44.jpg" class="scrap-photo" style="max-width: 45%;">
+                        <div class="page-num">4</div>
+                    </div>
+                    <div class="page-back" onclick="flipPage(this)">
+                        <img src="New folder/pic51.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <img src="New folder/pic52.jpg" class="scrap-photo" style="max-width: 48%;">
+                        <div class="page-num">5</div>
+                    </div>
+                </div>
+
+                <!-- Page 3 (pic6x & pic7x) -->
+                <div class="book-page" style="z-index: 12;">
+                    <div class="page-front" onclick="flipPage(this)">
+                        <img src="New folder/pic61.jpg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic62.jpg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic63.jpg" class="scrap-photo" style="max-width: 30%;">
+                        <div class="page-num">6</div>
+                    </div>
+                    <div class="page-back" onclick="flipPage(this)">
+                        <img src="New folder/pic71.jpg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic72.jpg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic73.png" class="scrap-photo scrap-special no-zoom"
+                            style="max-width: 30%; cursor: pointer;"
+                            onclick="event.stopPropagation(); showBookMessage(this, 'pani khatam kar diya')">
+                        <div class="page-num">7</div>
+                    </div>
+                </div>
+
+                <!-- Page 4 (pic8x & pic9x) -->
+                <div class="book-page" style="z-index: 11;">
+                    <div class="page-front" onclick="flipPage(this)">
+                        <img src="New folder/pic81.jpeg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic82.jpeg" class="scrap-photo" style="max-width: 30%;">
+                        <img src="New folder/pic91.jpeg" class="scrap-photo" style="max-width: 30%;">
+                        <div class="page-num">8</div>
+                    </div>
+                    <div class="page-back" onclick="flipPage(this)">
+                        <div
+                            style="padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; width: 100%;">
+                            <p
+                                style="font-family: 'Handlee', cursive; font-size: 2.2rem; line-height: 1.6; margin-bottom: 30px; color: #444; display: block;">
+                                We had a lot of wonderful time together
+                            </p>
+                            <p
+                                style="font-family: 'Handlee', cursive; font-size: 1.6rem; opacity: 0.8; margin-bottom: 40px; color: #444; display: block;">
+                                Pictures might be lost but the memories are not
+                            </p>
+                            <h2 class="fancy-text"
+                                style="font-size: 2.8rem; color: #444; -webkit-text-fill-color: #444; background: none; display: block;">
+                                They live in our brain and heart
+                            </h2>
+                        </div>
+                        <div class="page-num">9</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-controls">
+                <button class="book-btn" onclick="backToDoors()">Close Book & Exit</button>
+            </div>
+        </div>
+
+        <!-- Room 2 (Netflix UI Overhaul) -->
+        <div id="room2" class="room-content netflix-room">
+            <!-- Sidebar Nav (Scoped) -->
+            <div class="nf-sidebar">
+                <div class="nf-side-icon" style="color:#E50914; font-size:24px; font-weight:900;">N</div>
+                <div class="nf-side-icon" title="Search">🔍</div>
+                <div class="nf-side-icon active" title="Home">🏠</div>
+                <div class="nf-side-icon" title="Series">📺</div>
+                <div class="nf-side-icon" title="Movies">🎬</div>
+                <div class="nf-side-icon" title="My List">➕</div>
+                <div class="nf-side-icon" title="Back to XP" onclick="backToDoors()"
+                    style="margin-top:auto; padding-bottom:30px; font-size:16px;">💻</div>
+            </div>
+
+            <!-- Top Header -->
+            <header class="nf-header">
+                <ul class="nf-nav-list">
+                    <li class="active">Home</li>
+                    <li>TV Shows</li>
+                    <li>Movies</li>
+                    <li>New & Popular</li>
+                    <li>My List</li>
+                </ul>
+                <div class="nf-header-right">
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-bell"></i>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                        class="nf-profile-img">
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="hero-section" style="background-image: url('main.png');">
+                <div class="hero-text-content">
+                    <h1 class="hero-main-title">BEST BIRTHDAY celebration</h1>
+                    <div class="hero-meta-data">
+                        <span class="nf-match">100% Match</span>
+                        <span>2024</span>
+                        <span class="age" style="border:1px solid #777; padding:0 4px; font-size:12px;">HD</span>
+                        <span>Special Edition</span>
+                    </div>
+                    <p class="hero-description">Our best moments and memories together.</p>
+                    <div class="hero-action-buttons">
+                        <button class="hero-btn hero-btn-play" onclick="playVideo('New folder (2)/HB.mp4')">
+                            <i class="fas fa-play"></i> Play
+                        </button>
+                        <button class="hero-btn hero-btn-info" onclick="openVideoModal(0)">
+                            <i class="fas fa-info-circle"></i> More Info
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Rows -->
+            <div class="nf-rows-list">
+                <!-- Trending Now -->
+                <div class="nf-content-row">
+                    <h2 class="nf-row-head"></h2>
+                    <button class="nf-row-scroll-btn left" onclick="scrollNFRow(this, -1)">❮</button>
+                    <div class="nf-slider">
+                        <div class="nf-card-item" onclick="openVideoModal(0)">
+                            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">HB Azan: The Legend</div>
+                                <div class="nf-card-meta"><span class="nf-match">99% Match</span> • 2024</div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(1)">
+                            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">HB Reunion</div>
+                                <div class="nf-card-meta"><span class="nf-match">97% Match</span> • 2024</div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(2)">
+                            <img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Birthday Vibes 2</div>
+                                <div class="nf-card-meta"><span class="nf-match">95% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(3)">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">The Grill Night</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(4)">
+                            <img src="https://images.unsplash.com/photo-1513623935135-c896b59073c1?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Farzam's Big Day</div>
+                                <div class="nf-card-meta"><span class="nf-match">94% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(5)">
+                            <img src="https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Shan's Celebration</div>
+                                <div class="nf-card-meta"><span class="nf-match">96% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(6)">
+                            <img src="subhanhb.jpg">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">SF Birthday Party</div>
+                                <div class="nf-card-meta"><span class="nf-match">92% Match</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                </div>
+
+                <!-- Action & Fun -->
+                <div class="nf-content-row">
+                    <h2 class="nf-row-head">Acción y Aventura (Action & Fun)</h2>
+                    <button class="nf-row-scroll-btn left" onclick="scrollNFRow(this, -1)">❮</button>
+                    <div class="nf-slider">
+                        <div class="nf-card-item" onclick="openVideoModal(7)">
+                            <img src="https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Wrestling Vol 1</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(8)">
+                            <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Wrestling Vol 2</div>
+                                <div class="nf-card-meta"><span class="nf-match">96% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(9)">
+                            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">The Belt Story</div>
+                                <div class="nf-card-meta"><span class="nf-match">95% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(10)">
+                            <img src="https://images.unsplash.com/photo-1541278107931-e006523892df?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Card Games</div>
+                                <div class="nf-card-meta"><span class="nf-match">94% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(11)">
+                            <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Pool Vol 1</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(12)">
+                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Pool Vol 2</div>
+                                <div class="nf-card-meta"><span class="nf-match">97% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(13)">
+                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Ice Cream Hunt</div>
+                                <div class="nf-card-meta"><span class="nf-match">93% Match</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                </div>
+
+                <!-- Late Night Laughs -->
+                <div class="nf-content-row">
+                    <h2 class="nf-row-head">Comedias (Late Night Laughs)</h2>
+                    <button class="nf-row-scroll-btn left" onclick="scrollNFRow(this, -1)">❮</button>
+                    <div class="nf-slider">
+                        <div class="nf-card-item" onclick="openVideoModal(14)">
+                            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Naughty Moments</div>
+                                <div class="nf-card-meta"><span class="nf-match">99% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(15)">
+                            <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">The Bold One</div>
+                                <div class="nf-card-meta"><span class="nf-match">95% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(16)">
+                            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Blowjob Mystery</div>
+                                <div class="nf-card-meta"><span class="nf-match">91% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(17)">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Random Chaos</div>
+                                <div class="nf-card-meta"><span class="nf-match">94% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(18)">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Character Day</div>
+                                <div class="nf-card-meta"><span class="nf-match">96% Match</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                </div>
+
+                <!-- Travel & Food -->
+                <div class="nf-content-row">
+                    <h2 class="nf-row-head">Viajes y Comida (Travel & Food)</h2>
+                    <button class="nf-row-scroll-btn left" onclick="scrollNFRow(this, -1)">❮</button>
+                    <div class="nf-slider">
+                        <div class="nf-card-item" onclick="openVideoModal(19)">
+                            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Journey Pt 1</div>
+                                <div class="nf-card-meta"><span class="nf-match">97% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(20)">
+                            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Journey Pt 2</div>
+                                <div class="nf-card-meta"><span class="nf-match">95% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(21)">
+                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Cheezious 1</div>
+                                <div class="nf-card-meta"><span class="nf-match">99% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(22)">
+                            <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Cheezious 2</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(23)">
+                            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Dining Out</div>
+                                <div class="nf-card-meta"><span class="nf-match">96% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(24)">
+                            <img src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">The Sitting Plan</div>
+                                <div class="nf-card-meta"><span class="nf-match">94% Match</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                </div>
+
+                <!-- Special Events -->
+                <div class="nf-content-row">
+                    <h2 class="nf-row-head">Eventos Especiales (Special Events)</h2>
+                    <button class="nf-row-scroll-btn left" onclick="scrollNFRow(this, -1)">❮</button>
+                    <div class="nf-slider">
+                        <div class="nf-card-item" onclick="openVideoModal(25)">
+                            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Qawali Night</div>
+                                <div class="nf-card-meta"><span class="nf-match">99% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(26)">
+                            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Midnight Special</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(27)">
+                            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Valentimes</div>
+                                <div class="nf-card-meta"><span class="nf-match">97% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(28)">
+                            <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=400">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">The Montage</div>
+                                <div class="nf-card-meta"><span class="nf-match">99% Match</span></div>
+                            </div>
+                        </div>
+                        <div class="nf-card-item" onclick="openVideoModal(29)">
+                            <img src="ramzan.jpg">
+                            <div class="nf-card-overlay">
+                                <div class="nf-card-controls"><span>▶</span><span>➕</span><span>👍</span></div>
+                                <div class="nf-card-title">Ramzan Traditions</div>
+                                <div class="nf-card-meta"><span class="nf-match">98% Match</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="nf-row-scroll-btn right" onclick="scrollNFRow(this, 1)">❯</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Centralized Modal UI -->
+    <div id="nfVideoModal" class="nf-modal-overlay">
+        <div class="nf-modal-ui">
+            <button class="nf-modal-close-btn" onclick="closeVideoModal()">×</button>
+            <div id="modalHeroArea" class="nf-modal-header"></div>
+            <div class="nf-modal-content-area">
+                <h2 id="modalTitle" class="nf-modal-ttl">Video Title</h2>
+                <div class="modal-meta"
+                    style="display:flex; gap:15px; margin-bottom:20px; color:#46d369; font-weight:700;">
+                    <span id="modalMatch">98% Match</span>
+                    <span style="color:#d2d2d2">2024</span>
+                    <span style="border:1px solid #777; padding:0 4px; color:#d2d2d2">HD</span>
+                </div>
+                <p id="modalDescription" class="nf-modal-details">Detailed description of the memory goes
+                    here...</p>
+                <div style="margin-top:30px; display:flex; gap:15px;">
+                    <button id="modalPlayBtn" class="hero-btn hero-btn-play" style="width:200px;">
+                        <i class="fas fa-play"></i> Play Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    </div>
+
+    <!-- STAGE 4: SANDBOX (LIVE IDE) -->
+    <div id="sandboxStage" class="full-stage">
+        <div class="sandbox-room">
+            <div class="sandbox-preview" id="sandboxPreview"></div>
+            <div class="sandbox-ide">
+                <div class="sandbox-header">
+                    <div class="sandbox-tabs">
+                        <div class="sandbox-tab">index.html</div>
+                    </div>
+                    <button class="sandbox-exit-btn" onclick="exitSandbox()">✕</button>
+                </div>
+                <div class="sandbox-editor-container">
+                    <div class="sandbox-line-numbers">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20
+                    </div>
+                    <textarea id="sandboxEditor" class="sandbox-editor" spellcheck="false"
+                        placeholder="Write your code here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Windows XP UI Elements (Hidden by default) -->
+    <div id="xpTaskbar" class="xp-taskbar">
+        <div class="xp-start-btn" onclick="toggleStartMenu()">
+            <span class="xp-logo">田</span> start
+        </div>
+        <div class="xp-quick-launch">
+            <span onclick="openWindow('win-ie')" style="font-size: 16px; cursor: pointer; margin-left: 10px;">🌐</span>
+        </div>
+        <div class="xp-task-items">
+            <div class="xp-active-task">Birthday Portal</div>
+        </div>
+        <div class="xp-system-tray">
+            <span id="xpClock">12:00 PM</span>
+        </div>
+    </div>
+
+    <div id="xpIcons" class="xp-desktop-icons">
+        <div class="xp-icon" onclick="openWindow('win-computer')">
+            <div class="icon-img">
+                <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png" alt="My Computer">
+            </div>
+            <span>My Computer</span>
+        </div>
+        <div class="xp-icon" onclick="enterRoom(1)">
+            <div class="icon-img">
+                <img src="book.png" alt="memory book">
+            </div>
+            <span>memory book</span>
+        </div>
+        <div class="xp-icon" onclick="enterRoom(2)">
+            <div class="icon-img">
+                <img src="netflix.png" alt="netflix">
+            </div>
+            <span>netflix</span>
+        </div>
+
+        <div class="xp-icon" onclick="openWindow('win-ie')">
+            <div class="icon-img">🌐</div>
+            <span>Internet Explorer</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-recycle')">
+            <div class="icon-img">
+                <img src="https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-4.png" alt="Recycle Bin">
+            </div>
+            <span>Recycle Bin</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-study')">
+            <div class="icon-img">
+                <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" alt="study material">
+            </div>
+            <span>study material</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-yolo')">
+            <div class="icon-img">
+                <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" alt="Yolo">
+            </div>
+            <span>Yolo</span>
+        </div>
+    </div>
+
+    <!-- Games Icons on the right -->
+    <div id="xpGameIcons" class="xp-desktop-icons xp-desktop-right">
+        <div class="xp-icon" onclick="openWindow('win-gta5')">
+            <div class="icon-img">
+                <img src="gta.png" alt="GTA 5">
+            </div>
+            <span>GTA 5</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-detroit')">
+            <div class="icon-img">
+                <img src="detroit.ico" alt="Detroit Become Human" style="border-radius:3px;">
+            </div>
+            <span>Detroit Become Human</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-delta')">
+            <div class="icon-img">
+                <img src="delta.png" alt="Delta Force">
+            </div>
+            <span>Delta Force</span>
+        </div>
+        <div class="xp-icon" onclick="openWindow('win-pubg')">
+            <div class="icon-img">
+                <img src="pubg.jpg" alt="PUBG" style="border-radius:4px;">
+            </div>
+            <span>pubg</span>
+        </div>
+    </div>
+
+    <!-- Start Menu -->
+    <div id="startMenu" class="xp-start-menu hidden">
+        <div class="xp-start-header">
+            <img src="https://win98icons.alexmeub.com/icons/png/user_computer-0.png" class="xp-user-avatar">
+            <span class="xp-user-name">
+                <a href="https://www.instagram.com/p/DQ9FugECLrY/" target="_blank"
+                    style="color:white; text-decoration:underline;">Ai intern</a>
+            </span>
+        </div>
+        <div class="xp-start-body">
+            <div class="xp-start-left">
+                <div class="xp-start-item" onclick="openWindow('win-ie'); toggleStartMenu()"><img
+                        src="https://win98icons.alexmeub.com/icons/png/internet_explorer-0.png"> Internet Explorer</div>
+                <div class="xp-start-item"
+                    onclick="alert('Outlook Express: No new messages... just birthday wishes!'); toggleStartMenu()"><img
+                        src="https://win98icons.alexmeub.com/icons/png/message_envelope_open-0.png"> Outlook Express
+                </div>
+                <div class="xp-start-separator"></div>
+                <div class="xp-start-item" onclick="openWindow('win-gta5'); toggleStartMenu()"><img src="gta.png">
+                    GTA 5</div>
+                <div class="xp-start-item" onclick="openWindow('win-computer'); toggleStartMenu()"><img
+                        src="https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png"> My Computer</div>
+            </div>
+            <div class="xp-start-right">
+                <div class="xp-start-item" onclick="alert('My Documents: Classified.'); toggleStartMenu()">My Documents
+                </div>
+                <div class="xp-start-item" onclick="alert('My Pictures: Too embarrassing to show!'); toggleStartMenu()">
+                    My Pictures</div>
+                <div class="xp-start-separator" style="border-bottom: 1px solid rgba(255,255,255,0.4)"></div>
+                <div class="xp-start-item" onclick="openWindow('win-computer'); toggleStartMenu()">Control Panel</div>
+                <div class="xp-start-item" onclick="alert('Run: Format C: /y ... just kidding'); toggleStartMenu()">
+                    Run...</div>
+            </div>
+        </div>
+        <div class="xp-start-footer">
+            <div class="xp-start-btn-footer"
+                onclick="alert('System cannot log off during a Birthday!'); toggleStartMenu()">
+                <img src="https://win98icons.alexmeub.com/icons/png/key_win-0.png"> Log Off
+            </div>
+            <div class="xp-start-btn-footer" onclick="alert('The fun never shuts down!'); toggleStartMenu()"><img
+                    src="https://win98icons.alexmeub.com/icons/png/shut_down_normal-2.png"> Turn Off Computer</div>
+        </div>
+    </div>
+
+    <!-- Windows Container for XP Interfaces -->
+    <div id="windowsContainer">
+        <!-- My Computer Window -->
+        <div id="win-computer" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">My Computer</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-computer')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-folder-layout">
+                    <div class="xp-folder-item" onclick="alert('Access Denied: You need Senior Dev privileges!')"><img
+                            src="https://win98icons.alexmeub.com/icons/png/hard_disk_drive-2.png"> <span>Local Disk
+                            (C:)</span></div>
+                    <div class="xp-folder-item" onclick="alert('CD Drive: Please insert Birthday Tape')"><img
+                            src="https://win98icons.alexmeub.com/icons/png/cd_rom_drive-2.png">
+                        <span>CD Drive (D:)</span>
+                    </div>
+                    <div class="xp-folder-item" onclick="alert('Control Panel: Adjusting fun levels... MAXIMUM!')"><img
+                            src="https://win98icons.alexmeub.com/icons/png/settings_gear-0.png"> <span>Control
+                            Panel</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Internet Explorer Window -->
+        <div id="win-ie" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Internet Explorer</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-ie')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-ie-addressbar">Address <input type="text" value="http://www.google.com" readonly></div>
+                <div class="xp-ie-body">
+                    <h2>Server Error</h2>
+                    <p>Too much birthday celebration in progress!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recycle Bin Window -->
+        <div id="win-recycle" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Recycle Bin</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-recycle')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-folder-layout">
+                    <p style="padding:20px; font-style:italic;">Memories recovered. Cannot delete.</p>
+                    <div class="xp-folder-item"
+                        onclick="alert('Opening photo... This file is locked by the nostalgia manager.')"><img
+                            src="https://win98icons.alexmeub.com/icons/png/image_file-0.png">
+                        <span>Old_photo.jpg</span>
+                    </div>
+                    <div class="xp-folder-item" onclick="openWindow('win-disappointment')"><img
+                            src="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png">
+                        <span>disapointment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disappointment Folder Window -->
+        <div id="win-disappointment" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">disapointment</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-disappointment')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-folder-layout">
+                    <div class="xp-folder-item" onclick="openWindow('win-truth')">
+                        <img src="https://win98icons.alexmeub.com/icons/png/notepad_file-0.png">
+                        <span>truth.txt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Truth Text File Window -->
+        <div id="win-truth" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">truth.txt - Notepad</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-truth')">X</button>
+            </div>
+            <div class="xp-window-content" style="padding: 0;">
+                <textarea readonly
+                    style="width: 100%; height: 100%; border: none; resize: none; padding: 10px; font-family: 'Courier New', monospace; outline: none; background: white; color: black; box-sizing: border-box;">i could not save a child</textarea>
+            </div>
+        </div>
+
+        <!-- Study Material Window -->
+        <div id="win-study" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">study material</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-study')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-folder-layout">
+                    <div class="xp-folder-item" onclick="openWindow('win-vid-blow')">
+                        <video src="blow.mp4#t=0.5"
+                            style="width: 40px; height: 40px; object-fit: cover; margin-bottom: 5px; border-radius: 4px;"
+                            preload="metadata" muted></video>
+                        <span>blowjob</span>
+                    </div>
+                    <div class="xp-folder-item" onclick="openWindow('win-vid-sex')">
+                        <video src="sex.mp4#t=0.5"
+                            style="width: 40px; height: 40px; object-fit: cover; margin-bottom: 5px; border-radius: 4px;"
+                            preload="metadata" muted></video>
+                        <span>deep penetration</span>
+                    </div>
+                    <div class="xp-folder-item" onclick="openWindow('win-vid-bbc')">
+                        <video src="BBC.mp4#t=0.5"
+                            style="width: 40px; height: 40px; object-fit: cover; margin-bottom: 5px; border-radius: 4px;"
+                            preload="metadata" muted></video>
+                        <span>BBC</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Player Windows -->
+        <div id="win-vid-blow" class="xp-window hidden" style="width: 500px; height: 400px;">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Windows Media Player - blowjob</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-vid-blow')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="padding: 0; background: black; display: flex; align-items: center; justify-content: center;">
+                <video controls style="width: 100%; max-height: 100%; border: none;">
+                    <source src="blow.mp4" type="video/mp4">
+                    Your browser does not support the video block.
+                </video>
+            </div>
+        </div>
+
+        <div id="win-vid-sex" class="xp-window hidden" style="width: 500px; height: 400px;">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Windows Media Player - deep penetration</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-vid-sex')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="padding: 0; background: black; display: flex; align-items: center; justify-content: center;">
+                <video controls style="width: 100%; max-height: 100%; border: none;">
+                    <source src="sex.mp4" type="video/mp4">
+                    Your browser does not support the video block.
+                </video>
+            </div>
+        </div>
+
+        <div id="win-vid-bbc" class="xp-window hidden" style="width: 500px; height: 400px;">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Windows Media Player - BBC</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-vid-bbc')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="padding: 0; background: black; display: flex; align-items: center; justify-content: center;">
+                <video controls style="width: 100%; max-height: 100%; border: none;">
+                    <source src="BBC.mp4" type="video/mp4">
+                    Your browser does not support the video block.
+                </video>
+            </div>
+        </div>
+
+        <!-- Games Windows -->
+        <div id="win-gta5" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Grand Theft Auto V</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-gta5')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="background:black; display:flex; align-items:center; justify-content:center; flex-direction:column; color:white; padding:20px; text-align:center;">
+                <img src="gta.png" style="width:100px; margin-bottom:20px;">
+                <p style="font-weight:bold; color:red; margin-bottom:15px; font-size:18px;">donot even try!!! dooms day
+                    heist cannot be completed without being killed.</p>
+                <div
+                    style="width: 80%; height: 25px; border: 2px solid #555; background: #222; border-radius: 5px; overflow: hidden; position: relative;">
+                    <div style="width: 10%; height: 100%; background: #ffcc00;"></div>
+                </div>
+                <span style="font-size: 12px; margin-top: 5px;">Loading... 10%</span>
+            </div>
+        </div>
+
+        <div id="win-detroit" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Detroit: Become Human</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-detroit')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="background:#0a0a0a; color:#00e5ff; text-align:center; padding: 20px; font-family:sans-serif; display:flex; flex-direction:column; justify-content:center;">
+                <h1 style="font-weight:300; letter-spacing:2px; margin-bottom:20px;">DETROIT</h1>
+                <p style="font-size:18px;">biggest regrets lie here 😔</p>
+            </div>
+        </div>
+
+        <div id="win-delta" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Delta Force</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-delta')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="background:#334d33; color:#b3ffb3; text-align:center; padding: 20px; font-family:'Courier New', monospace; display:flex; flex-direction:column; justify-content:center;">
+                <h1 style="margin-bottom:20px;">DELTA FORCE</h1>
+                <p style="font-size:16px;">> donot take it personally</p>
+                <p style="font-size:16px;">> its only a last mission</p>
+            </div>
+        </div>
+
+        <div id="win-pubg" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">PUBG</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-pubg')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="background:#f2a900; color:white; text-align:center; padding: 20px; font-family:sans-serif; display:flex; flex-direction:column; justify-content:center;">
+                <h1 style="margin-bottom:20px; font-weight:900; -webkit-text-stroke: 1px black;">WINNER WINNER CHICKEN
+                    DINNER</h1>
+                <p
+                    style="font-size:18px; font-weight:bold; color:black; background:rgba(255,255,255,0.7); padding:10px; border-radius:5px;">
+                    i can defeat you anytime in this game using DB</p>
+            </div>
+        </div>
+
+        <!-- Yolo Folder Window -->
+        <div id="win-yolo" class="xp-window hidden">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">Yolo</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-yolo')">X</button>
+            </div>
+            <div class="xp-window-content">
+                <div class="xp-folder-layout">
+                    <div class="xp-folder-item" onclick="openWindow('win-yolo-img')">
+                        <img src="https://win98icons.alexmeub.com/icons/png/image_file-0.png">
+                        <span>yolo.png</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yolo Image Window -->
+        <div id="win-yolo-img" class="xp-window hidden" style="width: auto; max-width: 80%; height: auto;">
+            <div class="xp-window-titlebar">
+                <div class="xp-title">yolo.png - Image Viewer</div>
+                <button class="xp-close-btn" onclick="closeWindow('win-yolo-img')">X</button>
+            </div>
+            <div class="xp-window-content"
+                style="background: #333; display: flex; justify-content: center; align-items: center; padding: 10px;">
+                <img src="yolo.png" alt="Yolo"
+                    style="max-width: 100%; max-height: 70vh; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+            </div>
+        </div>
+    </div>
+
+    <!-- Netflix Video Player Overlay -->
+    <div id="nfVideoPlayer" class="nf-video-player">
+        <div class="nf-player-header">
+            <span class="nf-player-back" onclick="closeVideo()"><i class="fas fa-arrow-left"></i> Back</span>
+            <div id="playerVideoTitle" class="nf-player-title">Memory Preview</div>
+            <span class="nf-player-close-icon" onclick="closeVideo()">✕</span>
+        </div>
+
+        <div class="nf-player-nav-container">
+            <button class="nf-nav-btn nf-prev-btn" onclick="prevVideo()"><i class="fas fa-chevron-left"></i></button>
+            <video id="nfMainVideo" controls></video>
+            <button class="nf-nav-btn nf-next-btn" onclick="nextVideo()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="nf-player-controls-hint">
+            Tip: Use <kbd>←</kbd> <kbd>→</kbd> keys to skip memories
+        </div>
+    </div>
+
+    <!-- Lightbox for Zooming -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightboxImg" class="lightbox-img" src="">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
